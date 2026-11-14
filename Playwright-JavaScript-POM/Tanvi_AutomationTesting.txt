@@ -1,0 +1,116 @@
+Alerts, Dialogs & Modals:
+-------------------------
+JavaScript Alert :
+
+Displays a message and an OK button . Playwright handles it using a dialog event.
+
+Confirmation Dialog:
+
+Asks the use to confirm or cancel an action, such as deleting some record
+
+
+Prompt dialog:
+
+Asks the user to enter text and click ok or cancel.
+
+
+Modal popup:
+
+An HTML component inside the web page , such as a login form , cookie notice or confirmation window,
+
+JavaScript alerts , confirms and prompts are browser dialogs. HTML modals are webpage elements. They require different playwright techniques.
+
+JavaScript alert:
+-----------------
+Suppose we click a button called show Alert . A browser dialog appears with the message 'Welcome to Playwright'. we want to playwright to read the message and click  OK Button.
+
+<button type="button" data-testid="test-alert-button" id="test-alert-button" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">Open Alert</button>
+
+
+test('Handle JavaScript alert',async({page})=>{
+
+await page.goto("URL");
+
+page.on('dialog',async dialog=>{ 
+
+console.log("Alert messager:", dialoge.message());
+expect(dialog.type()).toBe('alert');
+expect(dialog.message()).toBe('Welcome to Playwright');
+await dialog.accept();
+
+
+})
+
+await page.getByRole('button',{name:"Open Alert"}).click()
+
+
+})
+
+
+page.on()=- // listens for browser dialogs
+
+dialog.message() - reads the displayed mesaage
+
+dialog.type()- return the type , such as alert
+
+dialog.accept() - clicks ok.
+
+*** Register the dialog handler before clicking the button that opens the alert.''
+
+
+Confirmation  Dialog:
+---------------------
+test('Handle JavaScript Confirmation alert',async({page})=>{
+
+await page.goto("URL");
+
+page.on('dialog',async dialog=>{ 
+
+
+expect(dialog.type()).toBe('confirm');
+expect(dialog.message()).toBe('Do you want to continue?');
+await dialog.accept();
+
+// await dialog.dismiss();
+
+
+})
+
+await page.getByRole('button',{name:"Open Alert"}).click()
+
+
+})
+
+
+Prompt dialog:
+--------------
+
+test('Handle JavaScript Prompt',async({page})=>{
+
+await page.goto("URL");
+
+page.on('dialog',async dialog=>{ 
+
+
+expect(dialog.type()).toBe('prompt');
+expect(dialog.message()).toBe('Enter your name');
+await dialog.accept("Suresh");
+
+// await dialog.dismiss();
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
